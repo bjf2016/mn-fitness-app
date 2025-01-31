@@ -5,6 +5,8 @@ function App() {
   const [workouts, setWorkouts] = useState([]);
   const [exercise, setExercise] = useState("");
   const [reps, setReps] = useState("");
+  const [weight, setWeight] = useState("");
+  const [calories, setCalories] = useState(0);
 
   // Load stored workouts from local storage
   useEffect(() => {
@@ -20,12 +22,19 @@ function App() {
   }, [workouts]);
 
   const addWorkout = () => {
-    if (exercise && reps) {
-      const newWorkout = { exercise, reps };
+    if (exercise && reps && weight) {
+      const estimatedCalories = calculateCalories(weight, reps);
+      const newWorkout = { exercise, reps, weight, calories: estimatedCalories };
       setWorkouts([...workouts, newWorkout]);
       setExercise("");
       setReps("");
+      setWeight("");
+      setCalories(0);
     }
+  };
+
+  const calculateCalories = (weight, reps) => {
+    return Math.round((weight * reps * 0.1)); // Simple calorie estimation
   };
 
   return (
@@ -53,6 +62,15 @@ function App() {
             onChange={(e) => setReps(e.target.value)}
           />
         </div>
+        <div className="input-group mb-2">
+          <input
+            type="number"
+            className="form-control"
+            placeholder="Weight (lbs)"
+            value={weight}
+            onChange={(e) => setWeight(e.target.value)}
+          />
+        </div>
         <button className="btn btn-primary w-100" onClick={addWorkout}>
           Add Workout
         </button>
@@ -66,7 +84,7 @@ function App() {
         <ul className="list-group mt-3">
           {workouts.map((workout, index) => (
             <li key={index} className="list-group-item">
-              <strong>{workout.exercise}</strong> - {workout.reps} reps
+              <strong>{workout.exercise}</strong> - {workout.reps} reps at {workout.weight} lbs - 🔥 {workout.calories} calories burned
             </li>
           ))}
         </ul>
