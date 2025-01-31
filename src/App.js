@@ -38,7 +38,7 @@ function App() {
       alert("No workouts to export!");
       return;
     }
-  
+
     const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(workouts, null, 2));
     const downloadAnchorNode = document.createElement("a");
     downloadAnchorNode.setAttribute("href", dataStr);
@@ -48,6 +48,20 @@ function App() {
     document.body.removeChild(downloadAnchorNode);
   };
   
+  // ✅ Add a new function for clearing workouts
+    const clearWorkouts = () => {
+      if (workouts.length === 0) {
+        alert("No workouts to clear!");
+      return;
+    }
+
+    const confirmClear = window.confirm("Are you sure you want to clear all workouts?");
+      if (confirmClear) {
+        setWorkouts([]);
+      localStorage.removeItem("workouts");
+    }
+  };
+
   const importWorkouts = (event) => {
     const file = event.target.files[0];
     if (!file) return;
@@ -142,6 +156,12 @@ function App() {
 
       {/* Import Workouts Button */}
       <input type="file" accept="application/json" onChange={importWorkouts} className="form-control mt-3" />
+    
+      {/* Clear Workouts Button */}
+      <button className="btn btn-warning mt-3" onClick={clearWorkouts}>
+        🗑️ Clear All Workouts
+      </button>
+    
     </div>
   </div>
 )}
