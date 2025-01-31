@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
+import { Line } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+
+
 function App() {
   const [workouts, setWorkouts] = useState([]);
   const [exercise, setExercise] = useState("");
@@ -79,7 +85,33 @@ function App() {
     reader.readAsText(file);
   };
   
+  const deleteWorkout = (index) => {
+    const updatedWorkouts = workouts.filter((_, i) => i !== index);
+    setWorkouts(updatedWorkouts);
+    localStorage.setItem("workouts", JSON.stringify(updatedWorkouts));
+  };
+ 
 
+  const generateProgressData = () => {
+    if (workouts.length < 2) return null; // Need at least 2 workouts to track progress
+  
+    const labels = workouts.map((_, index) => `Workout ${index + 1}`);
+    const weights = workouts.map((workout) => workout.weight);
+  
+    return {
+      labels,
+      datasets: [
+        {
+          label: "Weight Lifted Over Time",
+          data: weights,
+          borderColor: "rgb(75, 192, 192)",
+          backgroundColor: "rgba(75, 192, 192, 0.2)",
+          tension: 0.4,
+        },
+      ],
+    };
+  };
+  
 
   const calculateCalories = (weight, reps) => {
     return Math.round((weight * reps * 0.1)); // Simple calorie estimation
@@ -141,13 +173,18 @@ function App() {
 ) : (
   <div className="row justify-content-center">
     <div className="col-md-8 col-sm-12">
-      <ul className="list-group mt-3">
-        {workouts.map((workout, index) => (
-          <li key={index} className="list-group-item">
-            <strong>{workout.exercise}</strong> - {workout.reps} reps at {workout.weight} lbs - 🔥 {workout.calories} calories burned
-          </li>
-        ))}
-      </ul>
+  
+  <ul className="list-group mt-3">
+  {workouts.map((workout, index) => (
+    <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+      <span>
+        <strong>{workout.exercise}</strong> - {workout.reps} reps at {workout.weight} lbs - 🔥 {workout.calories} calories burned
+      </span>
+      <button className="btn btn-danger btn-sm" onClick={() => deleteWorkout(index)}>❌ Delete</button>
+    </li>
+  ))}
+  </ul>
+
 
       {/* Export Workouts Button - Placed Right Below Workout List */}
       <button className="btn btn-success mt-3" onClick={exportWorkouts}>
@@ -155,7 +192,7 @@ function App() {
       </button>
 
       {/* Import Workouts Button */}
-      <input type="file" accept="application/json" onChange={importWorkouts} className="form-control mt-3" />
+      {/* <input type="file" accept="application/json" onChange={importWorkouts} className="form-control mt-3" > */}
     
       {/* Clear Workouts Button */}
       <button className="btn btn-warning mt-3" onClick={clearWorkouts}>
