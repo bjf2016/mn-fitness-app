@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/mn-fitness-app/static/css/main.f855e6bc.css",
-    "main.js": "/mn-fitness-app/static/js/main.31bac2f7.js",
+    "main.css": "/mn-fitness-app/static/css/main.e6c13ad2.css",
+    "main.js": "/mn-fitness-app/static/js/main.b2d538d3.js",
     "static/js/488.cc0e34a4.chunk.js": "/mn-fitness-app/static/js/488.cc0e34a4.chunk.js",
-    "static/media/logo.svg": "/mn-fitness-app/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/mn-fitness-app/index.html",
-    "main.f855e6bc.css.map": "/mn-fitness-app/static/css/main.f855e6bc.css.map",
-    "main.31bac2f7.js.map": "/mn-fitness-app/static/js/main.31bac2f7.js.map",
+    "main.e6c13ad2.css.map": "/mn-fitness-app/static/css/main.e6c13ad2.css.map",
+    "main.b2d538d3.js.map": "/mn-fitness-app/static/js/main.b2d538d3.js.map",
     "488.cc0e34a4.chunk.js.map": "/mn-fitness-app/static/js/488.cc0e34a4.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f855e6bc.css",
-    "static/js/main.31bac2f7.js"
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.b2d538d3.js"
   ]
 }
