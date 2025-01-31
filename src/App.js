@@ -33,6 +33,40 @@ function App() {
     }
   };
 
+  const exportWorkouts = () => {
+    if (workouts.length === 0) {
+      alert("No workouts to export!");
+      return;
+    }
+  
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(workouts, null, 2));
+    const downloadAnchorNode = document.createElement("a");
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "workouts.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    document.body.removeChild(downloadAnchorNode);
+  };
+  
+  const importWorkouts = (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+  
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const importedWorkouts = JSON.parse(e.target.result);
+        setWorkouts(importedWorkouts);
+        localStorage.setItem("workouts", JSON.stringify(importedWorkouts));
+      } catch (error) {
+        alert("Invalid file format. Please upload a valid JSON file.");
+      }
+    };
+    reader.readAsText(file);
+  };
+  
+
+
   const calculateCalories = (weight, reps) => {
     return Math.round((weight * reps * 0.1)); // Simple calorie estimation
   };
@@ -40,6 +74,12 @@ function App() {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">🏋️‍♂️ Fitness Tracker</h1>
+
+      {/* Import Workouts Section - Move Higher */}
+      <div className="text-center mt-3">
+      <h4>📂 Import Workouts</h4>
+      <input type="file" accept="application/json" onChange={importWorkouts} className="form-control w-50 mx-auto" style={{ display: "block" }} />
+      </div>
 
       <div className="row justify-content-center">
         <div className="col-md-6 col-sm-12">
@@ -80,23 +120,32 @@ function App() {
         </div>
       </div>
 
-      {/* Workout Log */}
-      <h2 className="text-center mt-4">Your Workouts</h2>
-      {workouts.length === 0 ? (
-        <p className="text-center text-muted">No workouts logged yet.</p>
-      ) : (
-        <div className="row justify-content-center">
-          <div className="col-md-8 col-sm-12">
-            <ul className="list-group mt-3">
-              {workouts.map((workout, index) => (
-                <li key={index} className="list-group-item">
-                  <strong>{workout.exercise}</strong> - {workout.reps} reps at {workout.weight} lbs - 🔥 {workout.calories} calories burned
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      )}
+{/* Workout Log */}
+<h2 className="text-center mt-4">Your Workouts</h2>
+{workouts.length === 0 ? (
+  <p className="text-center text-muted">No workouts logged yet.</p>
+) : (
+  <div className="row justify-content-center">
+    <div className="col-md-8 col-sm-12">
+      <ul className="list-group mt-3">
+        {workouts.map((workout, index) => (
+          <li key={index} className="list-group-item">
+            <strong>{workout.exercise}</strong> - {workout.reps} reps at {workout.weight} lbs - 🔥 {workout.calories} calories burned
+          </li>
+        ))}
+      </ul>
+
+      {/* Export Workouts Button - Placed Right Below Workout List */}
+      <button className="btn btn-success mt-3" onClick={exportWorkouts}>
+        📥 Export Workouts
+      </button>
+
+      {/* Import Workouts Button */}
+      <input type="file" accept="application/json" onChange={importWorkouts} className="form-control mt-3" />
+    </div>
+  </div>
+)}
+
     </div>
   );
 }

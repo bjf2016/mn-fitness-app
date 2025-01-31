@@ -1,0 +1,5 @@
+[
+  { "exercise": "Bench Press", "reps": "10", "weight": "100", "calories": 50 },
+  { "exercise": "Squats", "reps": "12", "weight": "150", "calories": 75 },
+  { "exercise": "Deadlifts", "reps": "8", "weight": "200", "calories": 90 }
+]
