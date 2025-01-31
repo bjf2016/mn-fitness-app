@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 import { Line } from "react-chartjs-2";
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from "chart.js";
+import { 
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title, 
+  Tooltip, 
+  Legend 
+} from "chart.js";
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
@@ -93,7 +102,7 @@ function App() {
  
 
   const generateProgressData = () => {
-    if (workouts.length < 2) return null; // Need at least 2 workouts to track progress
+    if (workouts.length < 2) return null; // Need at least 2 workouts to show a graph
   
     const labels = workouts.map((_, index) => `Workout ${index + 1}`);
     const weights = workouts.map((workout) => workout.weight);
@@ -111,7 +120,6 @@ function App() {
       ],
     };
   };
-  
 
   const calculateCalories = (weight, reps) => {
     return Math.round((weight * reps * 0.1)); // Simple calorie estimation
@@ -164,6 +172,10 @@ function App() {
             </button>
           </div>
         </div>
+
+
+
+
       </div>
 
 {/* Workout Log */}
@@ -191,14 +203,21 @@ function App() {
         📥 Export Workouts
       </button>
 
-      {/* Import Workouts Button */}
-      {/* <input type="file" accept="application/json" onChange={importWorkouts} className="form-control mt-3" > */}
-    
       {/* Clear Workouts Button */}
       <button className="btn btn-warning mt-3" onClick={clearWorkouts}>
         🗑️ Clear All Workouts
       </button>
     
+      {/* ✅ Progress Tracker - Add Graph Below Workout List ✅ */}
+      <div className="mt-4">
+        <h3 className="text-center">📈 Progress Tracker</h3>
+        {workouts.length > 1 ? (
+          <Line data={generateProgressData()} />
+        ) : (
+          <p className="text-muted text-center">Add at least 2 workouts to see progress.</p>
+        )}
+      </div>
+
     </div>
   </div>
 )}
